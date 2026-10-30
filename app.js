@@ -439,7 +439,7 @@
     ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(photo, c.x, c.y, c.w, c.h, 0, 0, ow, oh);
 
-    const ext = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }[type];
+    const exts = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
     downloadBtn.disabled = true;
     canvas.toBlob((blob) => {
       downloadBtn.disabled = false;
@@ -449,7 +449,8 @@
       }
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `${state.fileName}_${ratioLabel()}.${ext}`;
+      // Browsers without WebP encoding fall back to PNG; name the file after what we got.
+      a.download = `${state.fileName}_${ratioLabel()}.${exts[blob.type] || 'png'}`;
       document.body.appendChild(a);
       a.click();
       a.remove();
