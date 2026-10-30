@@ -102,17 +102,25 @@
     .find((l) => l in STRINGS) || 'en';
 
   function t(key, vars = {}) {
-    const text = STRINGS[lang][key] ?? STRINGS.en[key];
+    const text = STRINGS[lang][key] ?? STRINGS.en[key] ?? key;
     return text.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
   }
 
+  // Elements whose key has no translation keep the text from the HTML.
   function translatePage() {
     document.documentElement.lang = lang;
-    document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
-    document.querySelectorAll('[data-i18n-html]').forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
-    document.querySelectorAll('[data-i18n-alt]').forEach((el) => { el.alt = t(el.dataset.i18nAlt); });
-    document.querySelectorAll('[data-i18n-aria]').forEach((el) => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+    const apply = (attr, set) => {
+      document.querySelectorAll(`[data-${attr}]`).forEach((el) => {
+        const key = el.getAttribute(`data-${attr}`);
+        const text = STRINGS[lang][key] ?? STRINGS.en[key];
+        if (text !== undefined) set(el, text);
+      });
+    };
+    apply('i18n', (el, s) => { el.textContent = s; });
+    apply('i18n-html', (el, s) => { el.innerHTML = s; });
+    apply('i18n-alt', (el, s) => { el.alt = s; });
+    apply('i18n-aria', (el, s) => { el.setAttribute('aria-label', s); });
+    apply('i18n-placeholder', (el, s) => { el.placeholder = s; });
   }
 
   // ---------- Aspect ratio ----------
