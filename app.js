@@ -34,6 +34,85 @@
     crop: { x: 0, y: 0, w: 0, h: 0 },
   };
 
+  // ---------- Translations ----------
+
+  const STRINGS = {
+    en: {
+      tagline: 'Crop a local photo to 16:9 and other common formats. Everything stays in your browser.',
+      dropHere: '<strong>Drop a photo here</strong> or',
+      chooseFile: 'Choose file',
+      photoAlt: 'Loaded photo',
+      cropAria: 'Crop area. Drag to move, arrow keys to nudge.',
+      format: 'Format',
+      aspectRatio: 'Aspect ratio',
+      original: 'Original',
+      free: 'Free',
+      portrait: 'Portrait ⇄',
+      landscape: 'Landscape ⇄',
+      reset: 'Reset area',
+      hint: 'Drag the area to move it, drag the handles to resize. Arrow keys nudge (Shift = 10 px).',
+      preview: 'Preview',
+      previewEmpty: 'Load a photo to see the preview.',
+      export: 'Export',
+      fileType: 'File type',
+      quality: 'Quality',
+      outWidth: 'Output width (px, empty = full resolution)',
+      full: 'full',
+      download: 'Download',
+      another: 'Load another photo',
+      dimensions: 'Selection: {sw} × {sh} px · Output: {ow} × {oh} px',
+      notImage: 'Please choose an image file.',
+      decodeFailed: 'This image could not be decoded by your browser.',
+      exportFailed: 'Export failed. The image may be too large for this browser.',
+    },
+    de: {
+      tagline: 'Schneide ein lokales Foto auf 16:9 und andere gängige Formate zu. Alles bleibt in deinem Browser.',
+      dropHere: '<strong>Foto hierher ziehen</strong> oder',
+      chooseFile: 'Datei auswählen',
+      photoAlt: 'Geladenes Foto',
+      cropAria: 'Ausschnitt. Ziehen zum Verschieben, Pfeiltasten zum Feinjustieren.',
+      format: 'Format',
+      aspectRatio: 'Seitenverhältnis',
+      original: 'Original',
+      free: 'Frei',
+      portrait: 'Hochformat ⇄',
+      landscape: 'Querformat ⇄',
+      reset: 'Zurücksetzen',
+      hint: 'Ausschnitt ziehen zum Verschieben, Griffe ziehen zum Skalieren. Pfeiltasten verschieben (Umschalt = 10 px).',
+      preview: 'Vorschau',
+      previewEmpty: 'Lade ein Foto, um die Vorschau zu sehen.',
+      export: 'Export',
+      fileType: 'Dateityp',
+      quality: 'Qualität',
+      outWidth: 'Ausgabebreite (px, leer = volle Auflösung)',
+      full: 'voll',
+      download: 'Herunterladen',
+      another: 'Anderes Foto laden',
+      dimensions: 'Auswahl: {sw} × {sh} px · Ausgabe: {ow} × {oh} px',
+      notImage: 'Bitte wähle eine Bilddatei aus.',
+      decodeFailed: 'Dieses Bild kann dein Browser nicht lesen.',
+      exportFailed: 'Export fehlgeschlagen. Das Bild ist für diesen Browser möglicherweise zu groß.',
+    },
+  };
+
+  const lang = (navigator.languages || [navigator.language || 'en'])
+    .map((l) => l.toLowerCase().split('-')[0])
+    .find((l) => l in STRINGS) || 'en';
+
+  function t(key, vars = {}) {
+    const text = STRINGS[lang][key] ?? STRINGS.en[key];
+    return text.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
+  }
+
+  function translatePage() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-html]').forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+    document.querySelectorAll('[data-i18n-alt]').forEach((el) => { el.alt = t(el.dataset.i18nAlt); });
+    document.querySelectorAll('[data-i18n-aria]').forEach((el) => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+  }
+
   // ---------- Aspect ratio ----------
 
   // Returns width / height of the crop, or null for free cropping.
@@ -90,7 +169,7 @@
 
   function loadFile(file) {
     if (!file || !file.type.startsWith('image/')) {
-      alert('Please choose an image file.');
+      alert(t('notImage'));
       return;
     }
     const url = URL.createObjectURL(file);
@@ -113,7 +192,7 @@
     };
     img.onerror = () => {
       URL.revokeObjectURL(url);
-      alert('This image could not be decoded by your browser.');
+      alert(t('decodeFailed'));
     };
     img.src = url;
   }
@@ -167,7 +246,7 @@
       drawPreview();
       const [ow, oh] = outputSize();
       dimensions.textContent =
-        `Selection: ${Math.round(c.w)} × ${Math.round(c.h)} px · Output: ${ow} × ${oh} px`;
+        t('dimensions', { sw: Math.round(c.w), sh: Math.round(c.h), ow, oh });
     });
   }
 
@@ -303,7 +382,7 @@
 
   function updateOrientationButton() {
     orientationBtn.disabled = state.ratioKey === 'free' || state.ratioKey === '1:1';
-    orientationBtn.textContent = state.portrait ? 'Landscape ⇄' : 'Portrait ⇄';
+    orientationBtn.textContent = t(state.portrait ? 'landscape' : 'portrait');
   }
 
   ratiosEl.addEventListener('click', (e) => {
@@ -365,7 +444,7 @@
     canvas.toBlob((blob) => {
       downloadBtn.disabled = false;
       if (!blob) {
-        alert('Export failed. The image may be too large for this browser.');
+        alert(t('exportFailed'));
         return;
       }
       const a = document.createElement('a');
@@ -378,6 +457,7 @@
     }, type, Number(quality.value) / 100);
   });
 
+  translatePage();
   updateOrientationButton();
   updateQualityVisibility();
 })();

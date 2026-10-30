@@ -8,7 +8,8 @@ formats (4:3, 3:2, 1:1, 5:4, 21:9, original, free), in landscape or portrait.
 - Live preview of the result.
 - Download as JPEG, PNG or WebP at full resolution or a custom width.
 
-Everything runs in the browser; the photo is never uploaded.
+Everything runs in the browser; the photo is never uploaded. The UI is shown
+in German when the browser language is German, otherwise in English.
 
 ## Run locally
 

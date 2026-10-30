@@ -9,22 +9,22 @@
 <body>
   <header class="topbar">
     <h1>PhotoClipper</h1>
-    <p class="tagline">Crop a local photo to 16:9 and other common formats. Everything stays in your browser.</p>
+    <p class="tagline" data-i18n="tagline">Crop a local photo to 16:9 and other common formats. Everything stays in your browser.</p>
   </header>
 
   <main class="layout">
     <section class="workspace">
       <div id="dropzone" class="dropzone">
-        <p><strong>Drop a photo here</strong> or</p>
+        <p data-i18n-html="dropHere"><strong>Drop a photo here</strong> or</p>
         <label class="button primary">
-          Choose file
+          <span data-i18n="chooseFile">Choose file</span>
           <input id="file-input" type="file" accept="image/*" hidden>
         </label>
       </div>
 
       <div id="stage" class="stage" hidden>
-        <img id="photo" alt="Loaded photo" draggable="false">
-        <div id="crop" class="crop" tabindex="0" aria-label="Crop area. Drag to move, arrow keys to nudge.">
+        <img id="photo" data-i18n-alt="photoAlt" alt="Loaded photo" draggable="false">
+        <div id="crop" class="crop" tabindex="0" data-i18n-aria="cropAria" aria-label="Crop area. Drag to move, arrow keys to nudge.">
           <div class="grid"></div>
           <span class="handle" data-handle="nw"></span>
           <span class="handle" data-handle="n"></span>
@@ -40,37 +40,37 @@
 
     <aside class="sidebar">
       <section class="panel">
-        <h2>Format</h2>
-        <div id="ratios" class="ratios" role="radiogroup" aria-label="Aspect ratio">
+        <h2 data-i18n="format">Format</h2>
+        <div id="ratios" class="ratios" role="radiogroup" data-i18n-aria="aspectRatio" aria-label="Aspect ratio">
           <button type="button" data-ratio="16:9" class="active">16:9</button>
           <button type="button" data-ratio="4:3">4:3</button>
           <button type="button" data-ratio="3:2">3:2</button>
           <button type="button" data-ratio="1:1">1:1</button>
           <button type="button" data-ratio="5:4">5:4</button>
           <button type="button" data-ratio="21:9">21:9</button>
-          <button type="button" data-ratio="original">Original</button>
-          <button type="button" data-ratio="free">Free</button>
+          <button type="button" data-ratio="original" data-i18n="original">Original</button>
+          <button type="button" data-ratio="free" data-i18n="free">Free</button>
         </div>
         <div class="row">
           <button type="button" id="orientation" class="button">Portrait ⇄</button>
-          <button type="button" id="reset" class="button">Reset area</button>
+          <button type="button" id="reset" class="button" data-i18n="reset">Reset area</button>
         </div>
-        <p class="hint">Drag the area to move it, drag the handles to resize. Arrow keys nudge (Shift = 10 px).</p>
+        <p class="hint" data-i18n="hint">Drag the area to move it, drag the handles to resize. Arrow keys nudge (Shift = 10 px).</p>
       </section>
 
       <section class="panel">
-        <h2>Preview</h2>
+        <h2 data-i18n="preview">Preview</h2>
         <div class="preview-box">
           <canvas id="preview"></canvas>
-          <p id="preview-empty" class="muted">Load a photo to see the preview.</p>
+          <p id="preview-empty" class="muted" data-i18n="previewEmpty">Load a photo to see the preview.</p>
         </div>
         <p id="dimensions" class="muted"></p>
       </section>
 
       <section class="panel">
-        <h2>Export</h2>
+        <h2 data-i18n="export">Export</h2>
         <label class="field">
-          <span>File type</span>
+          <span data-i18n="fileType">File type</span>
           <select id="format">
             <option value="image/jpeg">JPEG</option>
             <option value="image/png">PNG</option>
@@ -78,15 +78,15 @@
           </select>
         </label>
         <label class="field" id="quality-field">
-          <span>Quality <output id="quality-value">92</output></span>
+          <span><span data-i18n="quality">Quality</span> <output id="quality-value">92</output></span>
           <input id="quality" type="range" min="50" max="100" value="92">
         </label>
         <label class="field">
-          <span>Output width (px, empty = full resolution)</span>
-          <input id="out-width" type="number" min="16" step="1" placeholder="full">
+          <span data-i18n="outWidth">Output width (px, empty = full resolution)</span>
+          <input id="out-width" type="number" min="16" step="1" data-i18n-placeholder="full" placeholder="full">
         </label>
-        <button type="button" id="download" class="button primary wide" disabled>Download</button>
-        <button type="button" id="change-photo" class="button wide" hidden>Load another photo</button>
+        <button type="button" id="download" class="button primary wide" disabled data-i18n="download">Download</button>
+        <button type="button" id="change-photo" class="button wide" hidden data-i18n="another">Load another photo</button>
       </section>
     </aside>
   </main>
