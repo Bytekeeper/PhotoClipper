@@ -60,6 +60,7 @@
       full: 'full',
       download: 'Download',
       another: 'Load another photo',
+      sourceLink: 'Source on GitHub',
       dimensions: 'Selection: {sw} × {sh} px · Output: {ow} × {oh} px',
       notImage: 'Please choose an image file.',
       decodeFailed: 'This image could not be decoded by your browser.',
@@ -88,6 +89,7 @@
       full: 'voll',
       download: 'Herunterladen',
       another: 'Anderes Foto laden',
+      sourceLink: 'Quellcode auf GitHub',
       dimensions: 'Auswahl: {sw} × {sh} px · Ausgabe: {ow} × {oh} px',
       notImage: 'Bitte wähle eine Bilddatei aus.',
       decodeFailed: 'Dieses Bild kann dein Browser nicht lesen.',
@@ -186,6 +188,7 @@
       changeBtn.hidden = false;
       downloadBtn.disabled = false;
       previewEmpty.hidden = true;
+      preview.hidden = false;
       resetCrop();
       // Wait for the visible <img> to lay out before positioning the overlay.
       if (photo.complete) render(); else photo.onload = render;
